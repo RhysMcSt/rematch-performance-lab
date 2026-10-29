@@ -91,7 +91,7 @@ async def upload_video(file: UploadFile = File(...)):
         out_dir = FRAME_DIR / video_id
         out_dir.mkdir(parents=True, exist_ok=True)
         # One preview frame every 5 seconds, capped at 240 frames. Accurate timestamps in filenames.
-        interval = max(5.0, metadata["duration_seconds"] / 240.0)
+        interval = max(1.0, metadata["duration_seconds"] / 240.0)
         # The fps filter can omit the final expected sample on short clips.
         # Select frames by presentation timestamp with a small tolerance instead.
         select_filter = f"select=isnan(prev_selected_t)+gte(t-prev_selected_t\\,{interval:.6f}),scale=960:-2:force_original_aspect_ratio=decrease"
