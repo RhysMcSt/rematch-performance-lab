@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0b0e">
+<title>Rematch Performance Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0b0e;--panel:#13151a;--panel2:#1a1d24;--line:#2a2e38;--text:#f4f5f7;--muted:#a0a5b1;--accent:#d5ff45;--red:#ff7373}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}header{padding:calc(16px + env(safe-area-inset-top)) 18px 15px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0a0b0ef2;backdrop-filter:blur(12px);z-index:4}header .top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-weight:850;letter-spacing:.08em;font-size:13px}.brand span{color:var(--accent)}.sub{font-size:12px;color:var(--muted);margin-top:3px}.wrap{max-width:1000px;margin:auto;padding:18px 14px 60px}.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.hero{padding:18px 4px 20px}.hero h1{font-size:clamp(27px,6vw,42px);line-height:1.06;letter-spacing:-.04em;margin:9px 0}.hero p{color:var(--muted);max-width:650px;margin:0}.grid{display:grid;grid-template-columns:1fr;gap:13px}.panel{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:16px;min-width:0}.panel h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row.between{justify-content:space-between}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:10px;font-weight:700}.btn.primary{background:var(--accent);color:#11140a;border-color:var(--accent)}.btn:disabled{opacity:.45;cursor:not-allowed}.field{width:100%;border:1px solid var(--line);background:#0d0f13;color:var(--text);border-radius:10px;padding:11px;margin-top:6px}.label{display:block;color:var(--muted);font-size:12px;margin-top:12px}.hint{font-size:12px;color:var(--muted)}.status{margin-top:12px;color:var(--muted);font-size:13px;overflow-wrap:anywhere}.status.error{color:var(--red)}.status.ok{color:var(--accent)}.drop{border:1px dashed #454b59;background:#0d0f13;border-radius:13px;padding:22px 12px;text-align:center}.drop strong{display:block;margin-bottom:5px}.drop input{max-width:100%;margin-top:12px}.hidden{display:none!important}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.stat{padding:11px;background:var(--panel2);border-radius:10px}.stat b{display:block;font-size:20px}.stat span{color:var(--muted);font-size:11px}.frame{width:100%;max-height:360px;object-fit:contain;background:#050506;border-radius:10px;display:block}.timeline{display:flex;gap:8px;overflow:auto;padding:10px 0 4px}.thumb{width:100px;flex:0 0 100px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#0c0d10;padding:0;color:var(--text);text-align:left}.thumb img{width:100%;height:62px;object-fit:cover;display:block}.thumb small{display:block;padding:5px;font-size:11px}.thumb.active{border-color:var(--accent)}.tagform{display:grid;grid-template-columns:1fr;gap:8px}.tags{display:grid;gap:8px;margin-top:12px}.tag{background:var(--panel2);border-radius:10px;padding:11px}.tag strong{display:block}.tag small{color:var(--muted)}.tag p{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.report{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d0f13;padding:12px;border-radius:10px;font-size:13px}.note{border-left:3px solid var(--accent);padding:8px 10px;color:var(--muted);font-size:12px}.footer{color:#777e8c;font-size:11px;text-align:center;padding:22px 0}.pill{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:4px 8px;color:var(--muted)}@media(min-width:760px){.wrap{padding:26px 22px 70px}.grid{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}.tagform{grid-template-columns:1fr 1fr}.tagform .full{grid-column:1/-1}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><div class="brand">REMATCH <span>PERFORMANCE LAB</span></div><div class="sub">Gameplay evidence → decisions → improvement</div></div><button class="btn" id="settingsBtn">Settings</button></div></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">Analysis workspace / v0.1</div><h1>Study the decision.<br>Not just the result.</h1><p>Upload a match, inspect timestamped frames, label your decisions and build a structured evidence base for future automated analysis.</p></section>
+<div class="grid">
+<section class="panel"><h2>01 / Import gameplay</h2><div class="drop"><strong>Choose a match recording</strong><div class="hint">MP4, MOV, M4V, WebM or MKV · processed on the backend</div><input id="videoFile" type="file" accept="video/mp4,video/quicktime,video/x-m4v,video/webm,video/x-matroska,.mkv"></div><div class="row" style="margin-top:12px"><button class="btn primary" id="uploadBtn">Upload & extract frames</button><span class="pill">Up to 60 minutes</span></div><div id="uploadStatus" class="status">Backend connection not yet checked.</div><div class="stats"><div class="stat"><b id="durationStat">—</b><span>Video duration</span></div><div class="stat"><b id="framesStat">—</b><span>Frames extracted</span></div><div class="stat"><b id="tagsStat">0</b><span>Manual labels</span></div></div></section>
+<section class="panel"><div class="row between"><h2>02 / Match context</h2><span class="pill">User supplied</span></div><label class="label">Season<select id="season" class="field"><option>Season 6 — current / provisional</option><option>Previous season — complete</option><option>Two seasons ago — complete</option><option>Other / scrim</option></select></label><label class="label">Rank at time of match<input id="rank" class="field" value="Plat 1" placeholder="e.g. Plat 1"></label><label class="label">Match result / score<input id="result" class="field" placeholder="Optional — don't guess"></label><label class="label">Analysis focus<select id="focus" class="field"><option>General decision-making and positioning</option><option>Overcommitting</option><option>Rotation and recovery</option><option>Passing and possession</option><option>Defensive positioning</option><option>Attacking decisions</option><option>Mechanical execution</option></select></label><div class="note" style="margin-top:12px">Season 6 stays provisional. Rank and match context are recorded as context, not treated as proof of a tactical conclusion.</div></section>
+<section class="panel wide"><div class="row between"><h2>03 / Frame review</h2><span class="pill" id="frameCount">No video loaded</span></div><div id="frameEmpty" class="hint">Upload a video to extract review frames. This view uses backend-generated images, not browser-only video decoding.</div><div id="frameReview" class="hidden"><img id="mainFrame" class="frame" alt="Selected gameplay frame"><div class="row between" style="margin-top:10px"><button class="btn" id="prevFrame">← Previous</button><strong id="frameTimestamp">0.0s</strong><button class="btn" id="nextFrame">Next →</button></div><div id="timeline" class="timeline"></div></div></section>
+<section class="panel"><h2>04 / Manual event label</h2><div class="hint">Create ground truth. Correct and uncertain labels matter as much as correct detections.</div><div class="tagform"><label class="label">Event category<select id="category" class="field"><option>Decision point</option><option>Positioning</option><option>Overcommit</option><option>Rotation / recovery</option><option>Passing / possession</option><option>Defensive action</option><option>Attacking action</option><option>Mechanical error</option><option>Successful play</option><option>Other</option></select></label><label class="label">Judgement<select id="judgement" class="field"><option>Needs review</option><option>Good decision</option><option>Bad decision</option><option>Uncertain</option></select></label><label class="label">Timestamp (seconds)<input id="tagTime" class="field" type="number" min="0" step="0.1" placeholder="Select a frame or enter time"></label><label class="label">Confidence<select id="confidence" class="field"><option>Medium</option><option>High</option><option>Low</option></select></label><label class="label full">Evidence and reasoning<textarea id="tagNotes" class="field" rows="3" placeholder="What is directly visible? Why might this decision be good or bad? What is still unknown?"></textarea></label><div class="full"><button id="saveTag" class="btn primary">Save label</button></div></div><div id="tagList" class="tags"></div><div class="row" style="margin-top:12px"><button id="exportJson" class="btn">Export JSON</button><button id="exportCsv" class="btn">Export CSV</button><button id="clearTags" class="btn">Clear labels</button></div></section>
+<section class="panel"><div class="row between"><h2>05 / AI frame analysis</h2><span class="pill">Optional</span></div><p class="hint">Analyses a limited sample of extracted frames. It does not yet automatically recognise Rematch-specific events.</p><label class="label">Specific question (optional)<textarea id="aiPrompt" class="field" rows="3" placeholder="What should the analyst look for?"></textarea></label><label class="label">Frames to analyse<select id="aiFrames" class="field"><option value="6">6 — quick check</option><option value="12" selected>12 — standard</option><option value="24">24 — broader sample</option></select></label><button id="analyseBtn" class="btn primary" style="margin-top:12px" disabled>Analyse selected frames</button><div id="aiStatus" class="status">Configure the backend and upload a video first.</div><div id="aiReport" class="report hidden"></div></section>
+<section class="panel wide"><h2>06 / Current analysis record</h2><div id="recordSummary" class="hint">No recording loaded. Uploading a recording creates a processing record and timestamped frame list.</div><div class="row" style="margin-top:12px"><button id="healthBtn" class="btn">Check backend</button><button id="downloadMeta" class="btn" disabled>Export video metadata</button></div></section>
+</div>
+<div class="footer">Evidence first. Separate observation from interpretation. Verify every AI claim against the recording.</div>
+</main>
+<dialog id="settingsDialog" style="width:min(560px,calc(100% - 24px));border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text);padding:20px"><div class="row between"><h2>Backend settings</h2><button class="btn" id="closeSettings">Close</button></div><p class="hint">Enter the HTTPS URL of the deployed API. For local testing, use your local backend address.</p><label class="label">API base URL<input id="apiBase" class="field" placeholder="https://your-api.onrender.com"></label><label class="label">API access token (only if your backend requires one)<input id="apiToken" class="field" type="password" autocomplete="off" placeholder="Shared deployment token"></label><div class="row" style="margin-top:14px"><button id="saveSettings" class="btn primary">Save URL</button><button id="testSettings" class="btn">Test connection</button></div><p class="hint">Do not enter API keys here. AI credentials belong on the backend as environment variables.</p></dialog>
+<script src="./config.js"></script>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const state = {api:(window.REMATCH_API_BASE_URL||localStorage.getItem('rpl_api')||'').replace(/\/$/,''),token:localStorage.getItem('rpl_token')||'',video:null,frames:[],frameIndex:0,tags:JSON.parse(localStorage.getItem('rpl_tags')||'[]'),analysis:null};
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const url = p => state.api + p;
+async function apiFetch(path, options={}){const headers=new Headers(options.headers||{});if(state.token)headers.set('X-API-Token',state.token);return fetch(url(path),{...options,headers});}
+async function loadProtectedImage(img,path){try{const headers={};if(state.token)headers['X-API-Token']=state.token;const r=await fetch(url(path),{headers});if(!r.ok)throw Error('Frame request failed');const blob=await r.blob();if(img.dataset.objectUrl)URL.revokeObjectURL(img.dataset.objectUrl);img.dataset.objectUrl=URL.createObjectURL(blob);img.src=img.dataset.objectUrl;}catch(e){img.alt='Frame could not load — check backend URL and access token';}}
+function status(id,msg,kind=''){ $(id).textContent=msg; $(id).className='status '+kind; }
+function fmtTime(s){s=Number(s)||0;return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}.${String(Math.floor((s%1)*10))}`;}
+function persistTags(){localStorage.setItem('rpl_tags',JSON.stringify(state.tags));renderTags();}
+function renderTags(){
+ $('tagsStat').textContent=state.tags.length;
+ $('tagList').innerHTML=state.tags.length?state.tags.slice().sort((a,b)=>a.timestamp-b.timestamp).map(t=>`<div class="tag"><div class="row between"><strong>${esc(t.category)} · ${esc(t.judgement)}</strong><button class="btn" data-delete="${esc(t.id)}">Delete</button></div><small>${fmtTime(t.timestamp)} · Confidence: ${esc(t.confidence)} · ${esc(t.season||'')}</small><p>${esc(t.notes||'No notes')}</p></div>`).join(''):'<div class="hint">No labels yet. Select a frame, then save a label.</div>';
+ $('tagList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{state.tags=state.tags.filter(t=>t.id!==b.dataset.delete);persistTags();});
+}
+function renderFrame(){
+ if(!state.frames.length)return;
+ const f=state.frames[state.frameIndex];
+ $('mainFrame').removeAttribute('src');loadProtectedImage($('mainFrame'),f.url);$('frameTimestamp').textContent=fmtTime(f.timestamp_seconds);$('tagTime').value=f.timestamp_seconds;
+ $('timeline').innerHTML=state.frames.map((x,i)=>`<button class="thumb ${i===state.frameIndex?'active':''}" data-frame="${i}"><img loading="lazy" data-path="${esc(x.url)}" alt=""><small>${fmtTime(x.timestamp_seconds)}</small></button>`).join('');
+ const imgs=[...$('timeline').querySelectorAll('img[data-path]')];
+ if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){loadProtectedImage(entry.target,entry.target.dataset.path);observer.unobserve(entry.target);}}),{root:$('timeline'),rootMargin:'120px'});imgs.forEach(img=>observer.observe(img));}else{imgs.slice(0,12).forEach(img=>loadProtectedImage(img,img.dataset.path));}
+ $('timeline').querySelectorAll('[data-frame]').forEach(b=>b.onclick=()=>{state.frameIndex=Number(b.dataset.frame);renderFrame();});
+}
+function renderVideo(meta){
+ state.video=meta;state.frames=meta.frames||[];state.frameIndex=0;
+ $('durationStat').textContent=fmtTime(meta.duration_seconds);$('framesStat').textContent=state.frames.length;
+ $('frameCount').textContent=`${state.frames.length} frames`; $('frameEmpty').classList.toggle('hidden',!state.frames.length);$('frameReview').classList.toggle('hidden',!state.frames.length);
+ $('analyseBtn').disabled=!state.frames.length;$('downloadMeta').disabled=false;
+ $('recordSummary').innerHTML=`<b>${esc(meta.original_name)}</b><br>${fmtTime(meta.duration_seconds)} · ${esc(meta.format)} · ${(meta.size_bytes/1048576).toFixed(1)} MB<br>Sampling interval: ${esc(meta.sample_interval_seconds)} seconds<br>Video ID: <code>${esc(meta.video_id)}</code>`;
+ renderFrame();
+}
+async function health(){
+ if(!state.api){status('uploadStatus','Set your backend URL in Settings first.','error');return false;}
+ try{const r=await apiFetch('/health');if(!r.ok)throw Error('HTTP '+r.status);const d=await r.json();status('uploadStatus','Backend online: '+d.service,'ok');return true;}
+ catch(e){status('uploadStatus','Backend connection failed: '+e.message+'. Check URL, deployment and CORS settings.','error');return false;}
+}
+$('settingsBtn').onclick=()=>{$('apiBase').value=state.api;$('apiToken').value=state.token;$('settingsDialog').showModal();};
+$('closeSettings').onclick=()=>$('settingsDialog').close();
+$('saveSettings').onclick=()=>{state.api=$('apiBase').value.trim().replace(/\/$/,'');state.token=$('apiToken').value.trim();localStorage.setItem('rpl_api',state.api);localStorage.setItem('rpl_token',state.token);$('settingsDialog').close();health();};
+$('testSettings').onclick=async()=>{state.api=$('apiBase').value.trim().replace(/\/$/,'');state.token=$('apiToken').value.trim();await health();};
+$('healthBtn').onclick=health;
+$('uploadBtn').onclick=async()=>{
+ const file=$('videoFile').files[0];if(!file){status('uploadStatus','Choose a video first.','error');return;}
+ if(!state.api){status('uploadStatus','Set your backend URL in Settings first.','error');return;}
+ if(file.size>500*1024*1024){status('uploadStatus','File is larger than the default 500 MB limit.','error');return;}
+ const btn=$('uploadBtn');btn.disabled=true;status('uploadStatus','Uploading video, then validating and extracting frames on the backend…');
+ try{
+  const form=new FormData();form.append('file',file,file.name);
+  const r=await apiFetch('/api/uploads',{method:'POST',body:form});
+  const raw=await r.text();let data;try{data=JSON.parse(raw)}catch{throw Error(raw.slice(0,250)||'Unexpected server response');}
+  if(!r.ok)throw Error(data.detail||('HTTP '+r.status));
+  renderVideo(data);status('uploadStatus','Upload and frame extraction completed.','ok');
+ }catch(e){status('uploadStatus','Upload failed: '+e.message,'error');}
+ finally{btn.disabled=false;}
+};
+$('prevFrame').onclick=()=>{state.frameIndex=Math.max(0,state.frameIndex-1);renderFrame();};
+$('nextFrame').onclick=()=>{state.frameIndex=Math.min(state.frames.length-1,state.frameIndex+1);renderFrame();};
+$('saveTag').onclick=()=>{
+ if(!state.video){alert('Upload a video first.');return;}
+ const t=Number($('tagTime').value);if(!Number.isFinite(t)||t<0||t>state.video.duration_seconds){alert('Enter a timestamp inside the video duration.');return;}
+ state.tags.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),video_id:state.video.video_id,video_name:state.video.original_name,season:$('season').value,rank:$('rank').value,result:$('result').value,category:$('category').value,judgement:$('judgement').value,timestamp:t,confidence:$('confidence').value,notes:$('tagNotes').value,focus:$('focus').value,created_at:new Date().toISOString()});
+ $('tagNotes').value='';persistTags();
+};
+$('clearTags').onclick=()=>{if(confirm('Delete all labels saved in this browser? Export first if needed.')){state.tags=[];persistTags();}};
+function download(name,content,type){const blob=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+$('exportJson').onclick=()=>download('rematch-labels.json',JSON.stringify(state.tags,null,2),'application/json');
+$('exportCsv').onclick=()=>{
+ const keys=['video_id','video_name','season','rank','result','category','judgement','timestamp','confidence','notes','focus','created_at'];
+ const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ download('rematch-labels.csv',[keys.join(','),...state.tags.map(t=>keys.map(k=>q(t[k])).join(','))].join('\r\n'),'text/csv');
+};
+$('downloadMeta').onclick=()=>{if(state.video)download('rematch-video-metadata.json',JSON.stringify(state.video,null,2),'application/json');};
+$('analyseBtn').onclick=async()=>{
+ if(!state.video)return;const btn=$('analyseBtn');btn.disabled=true;status('aiStatus','Sending selected frames for analysis…');
+ try{
+  const r=await apiFetch(`/api/videos/${state.video.video_id}/analyse`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:$('aiPrompt').value||$('focus').value,max_frames:Number($('aiFrames').value)})});
+  const d=await r.json();if(!r.ok)throw Error(d.detail||'AI request failed');
+  state.analysis=d;$('aiReport').textContent=d.report+'\n\nWARNING: '+d.warning;$('aiReport').classList.remove('hidden');status('aiStatus',`Analysis completed using ${d.model}; ${d.frames_analysed.length} frames inspected.`,'ok');
+ }catch(e){status('aiStatus','Analysis unavailable: '+e.message,'error');}
+ finally{btn.disabled=false;}
+};
+renderTags();if(state.api)health();
+})();
+</script>
+</body></html>

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: rematch-performance-lab-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: DATA_DIR
+        value: /tmp/rematch-data
+      - key: MAX_UPLOAD_MB
+        value: "500"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: API_ACCESS_TOKEN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: VISION_MODEL
+        sync: false
+  - type: web
+    name: rematch-performance-lab-site
+    runtime: static
+    buildCommand: "echo 'Static site ready'"
+    staticPublishPath: ./frontend
